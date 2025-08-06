@@ -57,7 +57,7 @@ const removeEmployeeWizard = new Scenes.WizardScene(
 // Обработка нажатия на кнопку "Удалить"
 removeEmployeeWizard.action(/delete_user_(.+)/, async (ctx) => {
   const userId = ctx.match[1];
-
+  await ctx.answerCbQuery();
   try {
     const result = await delete_user_by_id(userId);
 

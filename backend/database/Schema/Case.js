@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
-const { v4 } = require("uuid");
+function generateFourDigitNumber() {
+  return Math.floor(1000 + Math.random() * 9000);
+}
 
 const CaseSchema = new mongoose.Schema({
   id: {
     type: String,
-    default: v4(),
+    default: generateFourDigitNumber(),
     require: true,
   },
   photo: {
@@ -21,4 +23,4 @@ const CaseSchema = new mongoose.Schema({
 });
 
 const model = mongoose.model("Case", CaseSchema);
-module.exports = model
+module.exports = model;

@@ -1,5 +1,8 @@
 const { Router } = require("express");
-const { create_application } = require("../../database/Request/Application");
+const {
+  create_application,
+  add_chats_id,
+} = require("../../database/Request/Application");
 const { body, validationResult } = require("express-validator");
 const multer = require("multer");
 const path = require("path");
@@ -7,6 +10,7 @@ const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
 
 const storagePath = path.join(__dirname, "../../storage");
+const router = Router();
 
 // Конфигурация multer
 const upload = multer({
@@ -30,7 +34,8 @@ const upload = multer({
   },
 });
 
-const router = Router();
+const bot = require("../../bot/bot");
+const sendApplication = require("../../bot/handlers/sendApplication");
 
 router.post(
   "/request",
@@ -48,7 +53,11 @@ router.post(
       .exists({ checkFalsy: true })
       .withMessage("Телефон обязателен.")
       .isString()
-      .withMessage("Телефон должен быть строкой."),
+      .withMessage("Телефон должен быть строкой.")
+      .isLength({ max: 18 })
+      .withMessage("Телефон не должен превышать 18 символов.")
+      .matches(/^\+?[0-9\s\-()]+$/)
+      .withMessage("Некорректный формат номера телефона."),
 
     body("message")
       .optional()
@@ -87,12 +96,24 @@ router.post(
       }
 
       const newRequest = await create_application({
-        name_client: client_name,
+        client_name,
         phone,
         message,
         file: savedFilename,
       });
-
+      if (!newRequest.success)
+        return res
+          .json(500)
+          .json({ success: false, errors: ["Ошибка сервера"] });
+      let telegram = await sendApplication(bot, {
+        id: newRequest.id,
+        client_name,
+        phone,
+        message,
+        file: savedFilename,
+      });
+      console.log(telegram);
+      await add_chats_id(newRequest.id, telegram.messageIDs);
       return res.status(201).json(newRequest);
     } catch (error) {
       console.error(error);

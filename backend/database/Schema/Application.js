@@ -7,12 +7,12 @@ const ApplicationSchema = new mongoose.Schema({
     default: v4(),
     require: true,
   },
-  name_client: {
+  client_name: {
     type: String,
     require: true,
   },
   phone: {
-    type: Number,
+    type: String,
     require: true,
   },
   message: {
@@ -21,6 +21,18 @@ const ApplicationSchema = new mongoose.Schema({
   file: {
     type: String,
   },
+  messageIDs: [
+    {
+      chat_id: {
+        type: String,
+        required: true,
+      },
+      message_id: {
+        type: Number,
+        required: true,
+      },
+    },
+  ],
 });
 
 const model = mongoose.model("Application", ApplicationSchema);

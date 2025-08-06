@@ -32,6 +32,11 @@ async function get_all_users() {
   return users;
 }
 
+async function get_menagers() {
+  let users = await UserSchema.find({ role: "manager" });
+  return users;
+}
+
 async function delete_user_by_id(id) {
   try {
     let findUser = await UserSchema.findOneAndDelete({ id });
@@ -60,4 +65,5 @@ module.exports = {
   get_all_users,
   delete_user_by_id,
   is_admin,
+  get_menagers,
 };

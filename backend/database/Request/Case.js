@@ -14,4 +14,13 @@ async function create_case({ photo, title, description }) {
   }
 }
 
-module.exports = { create_case };
+async function get_all_case(limit) {
+  try {
+    const all_case = await Case.find({}).limit(limit);
+    return await { success: true, all_case };
+  } catch (error) {
+    return { success: false, message: error.message };
+  }
+}
+
+module.exports = { create_case, get_all_case };

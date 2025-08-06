@@ -40,12 +40,11 @@ const addCaseWizard = new Scenes.WizardScene(
       return;
     }
 
-    // Скачиваем фото
     ctx.wizard.state.photo = photo.file_id;
     try {
       const filePath = await downloadFile(photo.file_id, ctx.telegram);
       console.log(filePath);
-      ctx.wizard.state.photoPath = filePath;
+      ctx.wizard.state.photo = filePath;
     } catch (err) {
       await ctx.reply("❌ Не удалось сохранить фото.");
       return ctx.scene.leave();
@@ -89,7 +88,12 @@ const addCaseWizard = new Scenes.WizardScene(
     const save = await create_case(ctx.wizard.state);
     console.log("✅ Кейс сохранён:", save);
 
-    await ctx.reply("✅ Кейс успешно добавлен!", Markup.removeKeyboard());
+    await ctx.reply(
+      "✅ Кейс успешно добавлен!",
+      Markup.keyboard([["➕ Добавить кейс"], ["➖ Удалить кейс"]])
+        .resize()
+        .oneTime()
+    );
     return ctx.scene.leave();
   }
 );
