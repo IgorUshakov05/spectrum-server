@@ -30,61 +30,32 @@ const removeEmployeeWizard = new Scenes.WizardScene(
       return ctx.scene.leave();
     }
 
-    // Инициализируем массив для хранения message_id
-    ctx.scene.session.employeeMessages = [];
-
     for (const user of users) {
       const text = `👤 <b>${user.fullname}</b>\n🛡 Роль: <i>${user.role}</i>`;
+
       const message = await ctx.reply(text, {
-        reply_markup: {
+        parse_mode: "HTML",
+      });
+
+      await ctx.telegram.editMessageReplyMarkup(
+        ctx.chat.id,
+        message.message_id,
+        null,
+        {
           inline_keyboard: [
             [
               {
                 text: "🗑 Удалить",
-                callback_data: `delete_user_${user.id}`,
+                callback_data: `delete_user_${user.id}_${message.message_id}`,
               },
             ],
           ],
-        },
-        parse_mode: "HTML",
-      });
-
-      ctx.scene.session.employeeMessages.push(message.message_id);
+        }
+      );
     }
+
+    return ctx.scene.leave();
   }
 );
-
-// Обработка нажатия на кнопку "Удалить"
-removeEmployeeWizard.action(/delete_user_(.+)/, async (ctx) => {
-  const userId = ctx.match[1];
-  await ctx.answerCbQuery();
-  try {
-    const result = await delete_user_by_id(userId);
-
-    // Удаляем все сообщения со списком сотрудников
-    if (ctx.scene.session.employeeMessages) {
-      for (const msgId of ctx.scene.session.employeeMessages) {
-        try {
-          await ctx.deleteMessage(msgId);
-        } catch (err) {
-          // Игнорируем ошибку, если сообщение уже удалено
-        }
-      }
-    }
-
-    if (result.success) {
-      await ctx.answerCbQuery("✅ Пользователь удалён", { show_alert: false });
-      await ctx.reply("✅ Пользователь успешно удалён.", mainMenuKeyboard);
-    } else {
-      await ctx.answerCbQuery(`❌ Ошибка: ${result.message}`, {
-        show_alert: true,
-      });
-    }
-  } catch (e) {
-    await ctx.answerCbQuery(`❌ Ошибка: ${e.message}`, { show_alert: true });
-  }
-
-  return ctx.scene.leave();
-});
 
 module.exports = removeEmployeeWizard;

@@ -20,7 +20,7 @@ router.get("/case/:id", async (req, res) => {
 });
 router.get("/case", async (req, res) => {
   try {
-    let limit = req.query.limit ? req.query.limit : 6;
+    let limit = !!req.query.limit ? 6 : null;
     const cases = await get_all_case(limit);
     return res.status(200).json({ success: true, data: cases.all_case });
   } catch (error) {

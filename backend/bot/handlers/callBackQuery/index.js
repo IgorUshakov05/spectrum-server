@@ -1,4 +1,5 @@
 const inWork = require("./events/inWork");
+const remove = require("./events/removeEmploye");
 
 module.exports = (bot) => {
   bot.on("callback_query", async (ctx) => {
@@ -6,6 +7,9 @@ module.exports = (bot) => {
       const callbackData = ctx.callbackQuery.data;
       if (callbackData.startsWith("take_to_work_")) {
         await inWork(ctx);
+      }
+      if (callbackData.startsWith("delete_user_")) {
+        await remove(ctx);
       }
     } catch (e) {
       console.log(e);

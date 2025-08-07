@@ -1,26 +1,23 @@
 const mongoose = require("mongoose");
-function generateFourDigitNumber() {
-  return Math.floor(1000 + Math.random() * 9000);
-}
+const { v4 } = require("uuid");
 
 const CaseSchema = new mongoose.Schema({
   id: {
     type: String,
-    default: generateFourDigitNumber(),
-    require: true,
+    default: () => v4(),
+    unique: true,
   },
   photo: {
     type: String,
   },
   title: {
     type: String,
-    require: true,
+    required: true,
   },
   description: {
     type: String,
-    require: true,
+    required: true,
   },
 });
 
-const model = mongoose.model("Case", CaseSchema);
-module.exports = model;
+module.exports = mongoose.model("Case", CaseSchema);

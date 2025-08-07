@@ -14,7 +14,10 @@ const addCaseWizard = new Scenes.WizardScene(
   async (ctx) => {
     let chatId = ctx.from.id;
     let isAdmin = await is_admin(chatId);
-    if (!isAdmin.success) return ctx.reply("⛔️ У вас нет прав!");
+    if (!isAdmin.success) {
+      ctx.reply("⛔️ У вас нет прав!");
+      return ctx.scene.leave();
+    }
 
     await ctx.reply("📷 Пожалуйста, отправьте фото кейса:", cancelKeyboard);
     return ctx.wizard.next();
@@ -65,7 +68,10 @@ const addCaseWizard = new Scenes.WizardScene(
       );
       return ctx.scene.leave();
     }
-
+    if (!ctx.message || typeof ctx.message.text !== "string") {
+      await ctx.reply("❗️ Пожалуйста, введите текстовое название кейса.");
+      return;
+    }
     ctx.wizard.state.title = ctx.message.text;
     await ctx.reply("📝 Введите описание кейса:", cancelKeyboard);
     return ctx.wizard.next();
@@ -82,7 +88,10 @@ const addCaseWizard = new Scenes.WizardScene(
       );
       return ctx.scene.leave();
     }
-
+    if (!ctx.message || typeof ctx.message.text !== "string") {
+      await ctx.reply("❗️ Пожалуйста, введите текстовое описание кейса.");
+      return;
+    }
     ctx.wizard.state.description = ctx.message.text;
 
     const save = await create_case(ctx.wizard.state);

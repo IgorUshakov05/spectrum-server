@@ -19,6 +19,7 @@ module.exports = (bot) => {
       const payload = ctx?.startPayload;
       console.log(payload);
       if (userId === process.env.DIRECTOR) {
+        await 
         await set_chat_id(ctx.chat.id);
         return await ctx.reply(
           "👋 Добро пожаловать!\n\nВыберите одно из доступных действий:",

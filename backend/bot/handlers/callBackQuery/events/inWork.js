@@ -25,7 +25,7 @@ module.exports = async function toWork(ctx) {
         : "";
     const fileUrl = app.application.file
       ? `<a href="${process.env.BASE_URL}/api/v1/file?id=${app.application.file}">Скачать</a>`
-      : "Файл отсутствует";
+      : "Отсутствует";
 
     const updatedMessage = `
 ✅ Заявка взята в работу
@@ -35,9 +35,9 @@ module.exports = async function toWork(ctx) {
 📞 Телефон: ${escapeHtml(app.application.phone)}
 ✉️ Сообщение: 
 ${
-  app.application.message
-    ? `<code>
-    ${escapeHtml(app.application.message)}
+app.application.message
+?`<code>
+${escapeHtml(app.application.message)}
 </code>`
     : "Отсутствует"
 }
