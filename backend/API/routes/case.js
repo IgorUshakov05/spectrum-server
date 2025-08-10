@@ -12,7 +12,7 @@ router.get("/case/:id", async (req, res) => {
         .json({ success: false, message: "Некорректный ID" });
     }
 
-    return res.status(200).send(`../../storage/${id}`);
+    return res.status(200).send(`../../storage/${id}`);уа
   } catch (error) {
     console.error(`Ошибка при получении кейса с ID ${id}:`, error.message);
     return res.status(500).json({ success: false, message: "Ошибка сервера" });
@@ -20,7 +20,7 @@ router.get("/case/:id", async (req, res) => {
 });
 router.get("/case", async (req, res) => {
   try {
-    let limit = !!req.query.limit ? 6 : null;
+    let limit = !!req.query.limit ? 4 : null;
     const cases = await get_all_case(limit);
     return res.status(200).json({ success: true, data: cases.all_case });
   } catch (error) {

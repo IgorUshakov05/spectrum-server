@@ -4,16 +4,20 @@ const { v4 } = require("uuid");
 const ApplicationSchema = new mongoose.Schema({
   id: {
     type: String,
-    default: v4(),
-    require: true,
+    default: () => v4(),
+    required: true,
   },
   client_name: {
     type: String,
-    require: true,
+    required: true,
   },
   phone: {
     type: String,
-    require: true,
+    required: true,
+  },
+  time_stamp: {
+    type: Date,
+    default: new Date,
   },
   message: {
     type: String,

@@ -18,14 +18,14 @@ module.exports = async (bot, data) => {
         : "";
 
     const fileUrl = data.file
-      ? `<a href="${process.env.BASE_URL}/api/v1/file?id=${data.file}">Скачать</a>`
-      : "Файл отсутствует";
+      ? `<a href="${process.env.BASE_URL}/api/v1/file?id=${data.file}">${process.env.BASE_URL}/api/v1/file?id=${data.file}</a>`
+      : "Отсутствует";
 
     let message = `
 📌 Новый заказ
 
 👤 Имя: ${escapeHtml(data.client_name)}
-📞 Телефон: ${escapeHtml(data.phone)}
+📞 Телефон: <code>${escapeHtml(data.phone)}</code>
 ✉️ Сообщение: 
 <code>${data.message ? escapeHtml(data.message) : "Отсутствует"}</code>
 📎 Файл: ${fileUrl}`;

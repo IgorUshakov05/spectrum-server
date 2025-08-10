@@ -4,7 +4,7 @@ const { v4 } = require("uuid");
 const CodeSchema = new mongoose.Schema({
   id: {
     type: String,
-    default: v4(),
+    default: () => v4(),
     required: true,
   },
   code: {

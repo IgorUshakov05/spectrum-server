@@ -24,7 +24,7 @@ module.exports = async function toWork(ctx) {
         ? str.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/&/g, "&amp;")
         : "";
     const fileUrl = app.application.file
-      ? `<a href="${process.env.BASE_URL}/api/v1/file?id=${app.application.file}">Скачать</a>`
+      ? `<a href="${process.env.BASE_URL}/api/v1/file?id=${app.application.file}">${process.env.BASE_URL}/api/v1/file?id=${app.application.file}</a>`
       : "Отсутствует";
 
     const updatedMessage = `
@@ -32,11 +32,11 @@ module.exports = async function toWork(ctx) {
 👷 Менеджер: ${escapeHtml(manager.user.fullname)}
 
 👤 Имя: ${escapeHtml(app.application.client_name)}
-📞 Телефон: ${escapeHtml(app.application.phone)}
+📞 Телефон: <code>${escapeHtml(app.application.phone)}</code>
 ✉️ Сообщение: 
 ${
-app.application.message
-?`<code>
+  app.application.message
+    ? `<code>
 ${escapeHtml(app.application.message)}
 </code>`
     : "Отсутствует"
